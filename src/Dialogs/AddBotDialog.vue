@@ -14,7 +14,7 @@
             >Add new bot</v-btn>
         </template>
 
-        <v-toolbar flat dark class="primary">
+        <v-toolbar flat dark class="teal">
             <v-spacer></v-spacer>
             <v-toolbar-items>
                 <v-btn
@@ -26,13 +26,14 @@
                 </v-btn>
             </v-toolbar-items>
         </v-toolbar>
+
         <v-card>
             <v-form
                     ref="form"
                     lazy-validation
                     v-model="isValidOrder"
             >
-                <v-container >
+                <v-container>
                     <div class="justify-center text-center title py-4">Add Telegram Bot</div>
                     <v-divider></v-divider>
                     <v-row class="mx-0">
@@ -45,19 +46,19 @@
                                     color="teal"
                             ></v-text-field>
                         </v-col>
-                        <v-row class="mx-0">
-                            <v-col cols="12">
-                                <v-textarea
-                                        label="Description"
-                                        v-model="botData.description"
-                                        :rules="rules"
-                                        required
-                                        color="teal"
-                                        outlined
-                                        filled
-                                ></v-textarea>
-                            </v-col>
-                        </v-row>
+
+                        <v-col cols="12">
+                            <v-textarea
+                                    label="Description"
+                                    v-model="botData.description"
+                                    :rules="rules"
+                                    required
+                                    color="teal"
+                                    outlined
+                                    filled
+                            ></v-textarea>
+                        </v-col>
+
                     </v-row>
 
                     <v-row class="mx-0">
@@ -68,10 +69,12 @@
 
                     <v-row class="mx-0">
                         <v-col cols="12" class="d-flex justify-center">
-                            <v-date-picker v-model="picker" @change="dateChange"></v-date-picker>
+                            <v-date-picker
+                                    v-model="botData.date"
+                                    color="teal"
+                            ></v-date-picker>
                         </v-col>
                     </v-row>
-
 
                     <div class="d-flex justify-end">
                         <v-btn
@@ -105,9 +108,8 @@
                     name: null,
                     description: null,
                     image: null,
-                    date: null
+                    date: new Date().toISOString().substr(0, 10)
                 },
-                picker: new Date().toISOString().substr(0, 10),
                 isValidOrder: false,
             }
         },
@@ -120,10 +122,21 @@
             },
             saveBot() {
                 if (this.$refs.form.validate()) {
-                    // const params = new FormData();
-                    // params.append(this.botData);
-                    console.log(this.botData);
-                    this.$emit('bot-added',  this.botData);
+                    this.isDialogOpen = false;
+
+                    this.$store.commit('increment');
+                    this.botData.id = this.$store.state.botsId;
+
+                    this.$store.state.botsTableData.push(this.botData);
+                    // this.$emit('bot-added',  this.botData);
+
+                    this.botData = {
+                            id: null,
+                            name: null,
+                            description: null,
+                            image: null,
+                            date: new Date().toISOString().substr(0, 10)
+                    }
                 }
             }
         }
