@@ -16,8 +16,8 @@
                         <template>
                             <thead>
                             <tr>
-                                <th class="text-center subtitle-2 black--text">Name</th>
-                                <th class="text-center subtitle-2 black--text">Actions</th>
+                                <th class="text-center title black--text">Name</th>
+                                <th class="text-center title black--text">Actions</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -45,12 +45,8 @@
                         </template>
                     </v-simple-table>
                 </v-card>
-
-
             </v-col>
         </v-row>
-
-
     </v-container>
 </template>
 
@@ -67,11 +63,15 @@
             }
         },
         methods: {
-            deleteBot() {
-
+            deleteBot(item) {
+                console.log(item);
+                const index = this.tableData.indexOf(item);
+                console.log(index);
+                if (index > 0) this.tableData.splice(index, 1)
             },
             getTableData() {
                 this.tableData = this.$store.state.botsTableData;
+                console.log(this.tableData);
             }
         },
         created() {
