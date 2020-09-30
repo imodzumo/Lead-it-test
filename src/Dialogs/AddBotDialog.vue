@@ -117,6 +117,7 @@
                 this.botData.date = data;
             },
             setImage(file) {
+                console.log(file);
                 this.botData.image = file;
             },
             saveBot() {

@@ -64,7 +64,7 @@
 
                     <v-row class="mx-0">
                         <v-col cols="12">
-                            <drop-an-image @image-dropped="setImage"></drop-an-image>
+                            <drop-an-image :image-data="botData.image" @image-dropped="setImage"></drop-an-image>
                         </v-col>
                     </v-row>
 
@@ -128,7 +128,7 @@
             },
             saveBot() {
                 if (this.$refs.form.validate()) {
-                    this.isDialogOpen = false;
+                    // this.isDialogOpen = false;
                 }
             },
             getData() {

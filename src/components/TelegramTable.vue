@@ -4,7 +4,7 @@
             <v-col cols="12" class="d-flex justify-center">
                 <v-card-title>Telegram table</v-card-title>
             </v-col>
-            <v-col cols="6">
+            <v-col cols="12" sm="12" md="6">
                 <div class="pb-4">
                     <add-bot-dialog @bot-added="getTableData"></add-bot-dialog>
                 </div>

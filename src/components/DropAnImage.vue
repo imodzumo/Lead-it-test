@@ -6,7 +6,7 @@
          @drop.prevent="drop($event)">
 
         <img :src="imageSource" v-if="imageSource" />
-        <h1 v-if="wrongFile">Wrong file type</h1>
+        <h2 v-if="wrongFile">Wrong file type</h2>
         <h1 v-if="!imageSource && !isDragging && !wrongFile">Drop an image</h1>
 
     </div>
@@ -17,6 +17,7 @@
 <script>
     export default {
         name: 'DropAnImage',
+        props:['imageData'],
         data(){
             return{
                 isDragging:false,
@@ -26,15 +27,15 @@
         },
         computed:{
             getClasses(){
-                return {isDragging: this.isDragging}
-            }
+                return {isDragging: this.isDragging};
+            },
         },
         methods:{
             dragOver(){
-                this.isDragging = true
+                this.isDragging = true;
             },
             dragLeave(){
-                this.isDragging = false
+                this.isDragging = false;
             },
             drop(e){
                 let files = e.dataTransfer.files;
@@ -47,7 +48,7 @@
                         var reader = new FileReader();
                         reader.onload = f => {
                             this.imageSource = f.target.result;
-                            this.isDragging = false
+                            this.isDragging = false;
                         };
                         reader.readAsDataURL(file);
                         this.$emit('image-dropped', file);
@@ -57,9 +58,26 @@
                         this.isDragging = false;
                     }
                 }
-            },
-            onRequestUploadFiles(){
+            }
+        },
+        watch: {
+            imageData: {
+                handler() {
+                    if (this.imageData instanceof Blob) {
+                            this.wrongFile = false;
+                            let file = this.imageData;
 
+                            let reader = new FileReader();
+                            reader.onload = f => {
+                                this.imageSource = f.target.result;
+                            };
+                            reader.readAsDataURL(file);
+                        } else {
+                            this.imageSource = null;
+                        }
+                    console.log(this.imageSource);
+                },
+                immediate: true
             }
         }
     }
