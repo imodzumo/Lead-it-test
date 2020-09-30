@@ -63,7 +63,7 @@
 
                     <v-row class="mx-0">
                         <v-col cols="12">
-                            <drop-an-image @image-dropped="setImage"></drop-an-image>
+                            <drop-an-image :image-data="botData.image" @image-dropped="setImage"></drop-an-image>
                         </v-col>
                     </v-row>
 
@@ -116,8 +116,10 @@
             dateChange(data) {
                 this.botData.date = data;
             },
+            reset() {
+                this.botData = {}
+            },
             setImage(file) {
-                console.log(file);
                 this.botData.image = file;
             },
             saveBot() {
@@ -129,13 +131,7 @@
 
                     this.$store.state.botsTableData.push(this.botData);
 
-                    this.botData = {
-                            id: null,
-                            name: null,
-                            description: null,
-                            image: null,
-                            date: new Date().toISOString().substr(0, 10)
-                    }
+                    this.reset();
                 }
             }
         }

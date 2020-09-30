@@ -45,14 +45,14 @@
                     let file = files[0];
 
                     if (file.type.indexOf('image/') >= 0) {
-                        var reader = new FileReader();
+                        let reader = new FileReader();
                         reader.onload = f => {
                             this.imageSource = f.target.result;
                             this.isDragging = false;
                         };
                         reader.readAsDataURL(file);
                         this.$emit('image-dropped', file);
-                    }else{
+                    } else {
                         this.wrongFile = true;
                         this.imageSource = null;
                         this.isDragging = false;
@@ -63,8 +63,8 @@
         watch: {
             imageData: {
                 handler() {
-                    if (this.imageData instanceof Blob) {
-                            this.wrongFile = false;
+                    if (this.imageData instanceof File) {
+                        this.wrongFile = false;
                             let file = this.imageData;
 
                             let reader = new FileReader();
