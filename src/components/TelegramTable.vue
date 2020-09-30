@@ -26,7 +26,9 @@
                                     :key="row.id"
                                     class="text-center"
                             >
-                                <td>{{ row.name}}</td>
+                                <td>
+                                    <update-bot-dialog :bot="row"></update-bot-dialog>
+                                </td>
                                 <td>
                                     <v-btn
                                             @click="deleteBot(row.id)"
@@ -53,10 +55,11 @@
 <script>
 
     import AddBotDialog from '../Dialogs/AddBotDialog';
+    import UpdateBotDialog from '../Dialogs/UpdateBotDialog';
 
     export default {
         name: "TelegramTable",
-        components:{AddBotDialog},
+        components:{AddBotDialog, UpdateBotDialog},
         data() {
             return {
                 tableData: []
@@ -64,14 +67,11 @@
         },
         methods: {
             deleteBot(item) {
-                console.log(item);
-                const index = this.tableData.indexOf(item);
-                console.log(index);
-                if (index > 0) this.tableData.splice(index, 1)
+                const index = this.tableData.findIndex(data => data.id === item);
+                this.tableData.splice(index, 1);
             },
             getTableData() {
                 this.tableData = this.$store.state.botsTableData;
-                console.log(this.tableData);
             }
         },
         created() {
