@@ -8,68 +8,70 @@
                 <div class="pb-4">
                     <add-bot-dialog @bot-added="getTableData"></add-bot-dialog>
                 </div>
-                <v-simple-table
-                        fixed-header
-                        height="500px"
-                >
-                    <template>
-                        <thead>
-                        <tr>
-                            <th class="text-center subtitle-2 black--text">Name</th>
-                            <th class="text-center subtitle-2 black--text">Actions</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr
-                                v-for="row in tableData"
-                                :key="row.name"
-                                class="text-center"
-                        >
-                            <td>{{ row.name}}</td>
-                            <td>
-                                <v-btn
-                                        @click="deleteBot(row.name)"
-                                        color="error"
-                                        dark
-                                        rounded
-                                        fab
-                                        small
-                                        icon
-                                >
-                                    <v-icon>delete</v-icon>
-                                </v-btn>
-                            </td>
-                        </tr>
-                        </tbody>
-                    </template>
-                </v-simple-table>
-
+                <v-card>
+                    <v-simple-table
+                            fixed-header
+                            height="500px"
+                    >
+                        <template>
+                            <thead>
+                            <tr>
+                                <th class="text-center title black--text">Name</th>
+                                <th class="text-center title black--text">Actions</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr
+                                    v-for="row in tableData"
+                                    :key="row.id"
+                                    class="text-center"
+                            >
+                                <td>
+                                    <update-bot-dialog :bot="row"></update-bot-dialog>
+                                </td>
+                                <td>
+                                    <v-btn
+                                            @click="deleteBot(row.id)"
+                                            color="error"
+                                            dark
+                                            rounded
+                                            fab
+                                            small
+                                            icon
+                                    >
+                                        <v-icon>mdi-delete</v-icon>
+                                    </v-btn>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </template>
+                    </v-simple-table>
+                </v-card>
             </v-col>
         </v-row>
-
-
     </v-container>
 </template>
 
 <script>
 
     import AddBotDialog from '../Dialogs/AddBotDialog';
+    import UpdateBotDialog from '../Dialogs/UpdateBotDialog';
 
     export default {
         name: "TelegramTable",
-        components:{AddBotDialog},
+        components:{AddBotDialog, UpdateBotDialog},
         data() {
             return {
-                tableData: {}
+                tableData: []
             }
         },
         methods: {
-            deleteBot() {
-
+            deleteBot(item) {
+                const index = this.tableData.findIndex(data => data.id === item);
+                this.tableData.splice(index, 1);
             },
-            getTableData(data) {
-                console.log(data);
-                this.tableData = data;
+            getTableData() {
+                this.tableData = this.$store.state.botsTableData;
             }
         },
         created() {
