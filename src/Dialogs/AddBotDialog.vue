@@ -117,7 +117,14 @@
                 this.botData.date = data;
             },
             reset() {
-                this.botData = {}
+                this.$refs.form.reset();
+                this.botData = {
+                    id: null,
+                    name: null,
+                    description: null,
+                    image: null,
+                    date: new Date().toISOString().substr(0, 10)
+                };
             },
             setImage(file) {
                 this.botData.image = file;
@@ -129,7 +136,7 @@
                     this.$store.commit('increment');
                     this.botData.id = this.$store.state.botsId;
 
-                    this.$store.state.botsTableData.push(this.botData);
+                    this.$store.commit('addBot', this.botData);
 
                     this.reset();
                 }

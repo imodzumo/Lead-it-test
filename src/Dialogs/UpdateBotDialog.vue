@@ -128,11 +128,13 @@
             },
             saveBot() {
                 if (this.$refs.form.validate()) {
-                    // this.isDialogOpen = false;
+                    const data = Object.assign({}, this.botData);
+
+                    this.$store.commit('updateBot', data);
                 }
             },
             getData() {
-                this.botData = this.bot;
+                this.botData = Object.assign({}, this.bot);
             }
         },
         created() {

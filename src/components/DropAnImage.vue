@@ -65,17 +65,16 @@
                 handler() {
                     if (this.imageData instanceof File) {
                         this.wrongFile = false;
-                            let file = this.imageData;
+                        let file = this.imageData;
 
-                            let reader = new FileReader();
-                            reader.onload = f => {
-                                this.imageSource = f.target.result;
-                            };
-                            reader.readAsDataURL(file);
-                        } else {
-                            this.imageSource = null;
-                        }
-                    console.log(this.imageSource);
+                        let reader = new FileReader();
+                        reader.onload = f => {
+                            this.imageSource = f.target.result;
+                        };
+                        reader.readAsDataURL(file);
+                    } else {
+                        this.imageSource = null;
+                    }
                 },
                 immediate: true
             }

@@ -6,7 +6,7 @@
             </v-col>
             <v-col cols="12" sm="12" md="6">
                 <div class="pb-4">
-                    <add-bot-dialog @bot-added="getTableData"></add-bot-dialog>
+                    <add-bot-dialog></add-bot-dialog>
                 </div>
                 <v-card>
                     <v-simple-table
@@ -59,24 +59,20 @@
 
     export default {
         name: "TelegramTable",
-        components:{AddBotDialog, UpdateBotDialog},
-        data() {
-            return {
-                tableData: []
+        components:{
+            AddBotDialog,
+            UpdateBotDialog
+        },
+        computed: {
+            tableData() {
+                return this.$store.state.botsTableData;
             }
         },
         methods: {
-            deleteBot(item) {
-                const index = this.tableData.findIndex(data => data.id === item);
-                this.tableData.splice(index, 1);
+            deleteBot(data) {
+                this.$store.commit('deleteBot', data);
             },
-            getTableData() {
-                this.tableData = this.$store.state.botsTableData;
-            }
         },
-        created() {
-            this.getTableData();
-        }
     }
 </script>
 
