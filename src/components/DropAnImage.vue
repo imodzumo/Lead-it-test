@@ -6,7 +6,7 @@
          @drop.prevent="drop($event)">
 
         <img :src="imageSource" v-if="imageSource" />
-        <h1 v-if="wrongFile">Wrong file type</h1>
+        <h2 v-if="wrongFile">Wrong file type</h2>
         <h1 v-if="!imageSource && !isDragging && !wrongFile">Drop an image</h1>
 
     </div>
@@ -17,6 +17,7 @@
 <script>
     export default {
         name: 'DropAnImage',
+        props:['imageData'],
         data(){
             return{
                 isDragging:false,
@@ -26,40 +27,56 @@
         },
         computed:{
             getClasses(){
-                return {isDragging: this.isDragging}
-            }
+                return {isDragging: this.isDragging};
+            },
         },
         methods:{
             dragOver(){
-                this.isDragging = true
+                this.isDragging = true;
             },
             dragLeave(){
-                this.isDragging = false
+                this.isDragging = false;
             },
             drop(e){
                 let files = e.dataTransfer.files;
                 this.wrongFile = false;
-                // allows only 1 file
+
                 if (files.length === 1) {
                     let file = files[0];
-                    // allows image only
+
                     if (file.type.indexOf('image/') >= 0) {
-                        var reader = new FileReader();
+                        let reader = new FileReader();
                         reader.onload = f => {
                             this.imageSource = f.target.result;
-                            this.isDragging = false
+                            this.isDragging = false;
                         };
                         reader.readAsDataURL(file);
                         this.$emit('image-dropped', file);
-                    }else{
+                    } else {
                         this.wrongFile = true;
                         this.imageSource = null;
                         this.isDragging = false;
                     }
                 }
-            },
-            onRequestUploadFiles(){
+            }
+        },
+        watch: {
+            imageData: {
+                handler() {
+                    if (this.imageData instanceof File) {
+                        this.wrongFile = false;
+                        let file = this.imageData;
 
+                        let reader = new FileReader();
+                        reader.onload = f => {
+                            this.imageSource = f.target.result;
+                        };
+                        reader.readAsDataURL(file);
+                    } else {
+                        this.imageSource = null;
+                    }
+                },
+                immediate: true
             }
         }
     }

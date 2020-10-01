@@ -10,8 +10,9 @@
                     color="teal"
                     class="text-uppercase"
                     dark
+                    text
                     v-on="on"
-            >Add new bot</v-btn>
+            >{{ botName }}</v-btn>
         </template>
 
         <v-toolbar flat dark class="teal">
@@ -34,7 +35,7 @@
                     v-model="isValidOrder"
             >
                 <v-container>
-                    <div class="justify-center text-center title py-4">Add Telegram Bot</div>
+                    <div class="justify-center text-center title py-4">Update Telegram Bot</div>
                     <v-divider></v-divider>
                     <v-row class="mx-0">
                         <v-col cols="12">
@@ -96,8 +97,9 @@
     import DropAnImage from '../components/DropAnImage.vue'
 
     export default {
-        name: "AddBotDialog",
+        name: "UpdateBotDialog",
         components: {DropAnImage},
+        props:['bot'],
         data() {
             return {
                 isDialogOpen: false,
@@ -112,35 +114,31 @@
                 isValidOrder: false,
             }
         },
+        computed: {
+          botName() {
+              return this.bot ? this.bot.name : null;
+          }
+        },
         methods: {
             dateChange(data) {
                 this.botData.date = data;
-            },
-            reset() {
-                this.$refs.form.reset();
-                this.botData = {
-                    id: null,
-                    name: null,
-                    description: null,
-                    image: null,
-                    date: new Date().toISOString().substr(0, 10)
-                };
             },
             setImage(file) {
                 this.botData.image = file;
             },
             saveBot() {
                 if (this.$refs.form.validate()) {
-                    this.isDialogOpen = false;
+                    const data = Object.assign({}, this.botData);
 
-                    this.$store.commit('increment');
-                    this.botData.id = this.$store.state.botsId;
-
-                    this.$store.commit('addBot', this.botData);
-
-                    this.reset();
+                    this.$store.commit('updateBot', data);
                 }
+            },
+            getData() {
+                this.botData = Object.assign({}, this.bot);
             }
+        },
+        created() {
+            this.getData();
         }
     }
 </script>
